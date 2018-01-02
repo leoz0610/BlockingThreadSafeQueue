@@ -1,13 +1,16 @@
 package com.sili.blocking.queues;
 
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.LinkedList;
 
 /**
  * Created by leoz on 10/8/17.
  */
+@ThreadSafe
 class SynchronizedBlockingQueue<T> implements IBlockingQueue<T> {
-    private LinkedList<T> list;
-    private int maxCapacity;
+    private final LinkedList<T> list;
+    private final int maxCapacity;
 
     SynchronizedBlockingQueue(int maxCapacity) {
         list = new LinkedList<>();
