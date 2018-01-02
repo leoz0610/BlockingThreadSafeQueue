@@ -16,10 +16,14 @@ public class ConsumerJob extends JobBase<Integer> {
 
         try {
             while (true) {
-                int p = queue.pop();
-                System.out.printf("Consumer thread %s consumed item %d.\n", getJobName(), p);
+                try {
+                    int p = queue.pop();
+                    System.out.printf("Consumer thread %s consumed item %d.\n", getJobName(), p);
+                } catch (IllegalStateException ie) {
+                    System.out.printf("Consumer thread %s exception: %s.\n", getJobName(), ie);
+                }
 
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             }
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.toString());
