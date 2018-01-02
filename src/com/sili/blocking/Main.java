@@ -15,12 +15,12 @@ public class Main {
     public static void main(String[] args) throws Exception {
 	// write your code here
         IQueueFactory<Integer> queueFactory = new ThreadSafeQueueFactory<>();
-        IBlockingQueue<Integer> queue = queueFactory.create(QueueType.Synchronized);
+        IBlockingQueue<Integer> queue = queueFactory.create(QueueType.Sleep, 5);
 
         List<Thread> jobs = new ArrayList<>();
 
         int producerCnt = 3;
-        int consumerCnt = 2;
+        int consumerCnt = 3;
 
         for (int i = 0; i < producerCnt; i++) {
             jobs.add(new Thread(new ProducerJob(queue, "P" + i)));

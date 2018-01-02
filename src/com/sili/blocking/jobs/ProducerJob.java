@@ -21,9 +21,13 @@ public class ProducerJob extends JobBase<Integer> {
 
         try {
             while (true) {
-                int p = rand.nextInt(100);
-                queue.push(p);
-                System.out.printf("Producer thread %s produced item %d.\n", getJobName(), p);
+                try {
+                    int p = rand.nextInt(100);
+                    queue.push(p);
+                    System.out.printf("Producer thread %s produced item %d.\n", getJobName(), p);
+                } catch (IllegalStateException ie) {
+                    System.out.printf("Producer thread %s exception: %s.\n", getJobName(), ie);
+                }
 
                 Thread.sleep(5000);
             }

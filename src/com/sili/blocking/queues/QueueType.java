@@ -5,4 +5,5 @@ package com.sili.blocking.queues;
  */
 public enum QueueType {
     Synchronized,
+    Sleep,
 }

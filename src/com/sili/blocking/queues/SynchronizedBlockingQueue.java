@@ -1,43 +1,38 @@
 package com.sili.blocking.queues;
 
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.LinkedList;
 
 /**
  * Created by leoz on 10/8/17.
  */
+@ThreadSafe
 class SynchronizedBlockingQueue<T> implements IBlockingQueue<T> {
-    private LinkedList<T> list;
+    private final LinkedList<T> list;
+    private final int maxCapacity;
 
-    SynchronizedBlockingQueue() {
+    SynchronizedBlockingQueue(int maxCapacity) {
         list = new LinkedList<>();
+        this.maxCapacity = maxCapacity;
     }
 
     @Override
     public synchronized void push(T item) {
-        list.add(item);
-        System.out.println("Pushed " + item);
+        if (list.size() >= maxCapacity) {
+            throw new IllegalStateException("Over max capacity.");
+        }
+
+        list.addLast(item);
     }
 
     @Override
-    public T pop() throws Exception {
-        T p = null;
-        boolean consumed = false;
-
-        while (!consumed) {
-            synchronized (this) {
-                if (!list.isEmpty()) {
-                    consumed = true;
-                    p = list.removeFirst();
-                }
-            }
-
-            if (!consumed) {
-                Thread.sleep(100);
-            }
+    public synchronized T pop() {
+        if (list.isEmpty()) {
+            throw new IllegalStateException("Empty queue");
         }
 
-        System.out.println("Poped " + p);
-        return p;
+        return list.removeFirst();
     }
 
     @Override

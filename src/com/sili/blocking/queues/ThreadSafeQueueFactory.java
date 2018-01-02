@@ -7,10 +7,12 @@ import java.security.InvalidParameterException;
  */
 public class ThreadSafeQueueFactory<T> implements IQueueFactory<T> {
     @Override
-    public IBlockingQueue<T> create(QueueType type) {
+    public IBlockingQueue<T> create(QueueType type, int maxCapacity) {
         switch (type) {
             case Synchronized:
-                return new SynchronizedBlockingQueue<T>();
+                return new SynchronizedBlockingQueue<>(maxCapacity);
+            case Sleep:
+                return new SleepBlockingQueue<>(maxCapacity);
             default:
                 throw new InvalidParameterException();
         }
