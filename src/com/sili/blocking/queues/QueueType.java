@@ -7,4 +7,5 @@ public enum QueueType {
     Synchronized,
     Sleep,
     Condition,
+    Semaphore,
 }
