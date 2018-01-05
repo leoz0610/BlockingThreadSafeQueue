@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 	// write your code here
         IQueueFactory<Integer> queueFactory = new ThreadSafeQueueFactory<>();
-        IBlockingQueue<Integer> queue = queueFactory.create(QueueType.Sleep, 5);
+        IBlockingQueue<Integer> queue = queueFactory.create(QueueType.Condition, 5);
 
         List<Thread> jobs = new ArrayList<>();
 

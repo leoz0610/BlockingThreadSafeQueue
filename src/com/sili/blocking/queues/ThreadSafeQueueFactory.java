@@ -13,6 +13,8 @@ public class ThreadSafeQueueFactory<T> implements IQueueFactory<T> {
                 return new SynchronizedBlockingQueue<>(maxCapacity);
             case Sleep:
                 return new SleepBlockingQueue<>(maxCapacity);
+            case Condition:
+                return new ConditionVariableBlockingQueue<>(maxCapacity);
             default:
                 throw new InvalidParameterException();
         }
