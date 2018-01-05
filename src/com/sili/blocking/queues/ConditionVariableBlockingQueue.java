@@ -23,7 +23,7 @@ class ConditionVariableBlockingQueue<T> implements IBlockingQueue<T> {
     private final Condition notEmpty;
 
     ConditionVariableBlockingQueue(int maxCapacity) {
-        list = new LinkedList<T>();
+        list = new LinkedList<>();
         this.maxCapacity = maxCapacity;
         exLock = new ReentrantLock();
         notFull = exLock.newCondition();
