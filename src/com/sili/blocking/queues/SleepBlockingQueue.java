@@ -1,5 +1,6 @@
 package com.sili.blocking.queues;
 
+import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.LinkedList;
@@ -11,12 +12,13 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 @ThreadSafe
 class SleepBlockingQueue<T> implements IBlockingQueue<T> {
+    @GuardedBy("exLock")
     private final LinkedList<T> list;
     private final int maxCapacity;
     private final Lock exLock;
     private final int maxRetries = 3;
 
-    public SleepBlockingQueue(int maxCapacity) {
+    SleepBlockingQueue(int maxCapacity) {
         list = new LinkedList<T>();
         this.maxCapacity = maxCapacity;
         exLock = new ReentrantLock();
@@ -33,12 +35,11 @@ class SleepBlockingQueue<T> implements IBlockingQueue<T> {
                     list.addLast(item);
                     return;
                 }
-
-                Thread.sleep(100);
             } finally {
                 exLock.unlock();
             }
 
+            Thread.sleep(100);
             retries++;
         } while (retries < maxRetries);
 
@@ -55,12 +56,11 @@ class SleepBlockingQueue<T> implements IBlockingQueue<T> {
                 if (!list.isEmpty()) {
                     return list.removeFirst();
                 }
-
-                Thread.sleep(100);
             } finally {
                 exLock.unlock();
             }
 
+            Thread.sleep(100);
             retries++;
         } while (retries < maxRetries);
 
@@ -69,6 +69,11 @@ class SleepBlockingQueue<T> implements IBlockingQueue<T> {
 
     @Override
     public boolean isEmpty() {
-        return list.isEmpty();
+        try {
+            exLock.lock();
+            return list.isEmpty();
+        } finally {
+            exLock.unlock();
+        }
     }
 }

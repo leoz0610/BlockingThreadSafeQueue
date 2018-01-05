@@ -1,5 +1,6 @@
 package com.sili.blocking.queues;
 
+import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.LinkedList;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
  */
 @ThreadSafe
 class SynchronizedBlockingQueue<T> implements IBlockingQueue<T> {
+    @GuardedBy("this")
     private final LinkedList<T> list;
     private final int maxCapacity;
 
